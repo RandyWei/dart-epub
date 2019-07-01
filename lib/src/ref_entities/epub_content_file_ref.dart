@@ -32,13 +32,13 @@ abstract class EpubContentFileRef {
 
   String readContentAsTextSync() {
     List<int> contentStream = getContentStream();
-    String result = UTF8.decode(contentStream);
+    String result = Utf8Codec().decode(contentStream);
     return result;
   }
 
   Future<String> readContentAsText() async {
     List<int> contentStream = getContentStream();
-    String result = UTF8.decode(contentStream);
+    String result = Utf8Codec().decode(contentStream);
     return result;
   }
 
@@ -49,12 +49,11 @@ abstract class EpubContentFileRef {
   ArchiveFile getContentFileEntry() {
     String contentFilePath =
         ZipPathUtils.combine(epubBookRef.Schema.ContentDirectoryPath, FileName);
-    ArchiveFile contentFileEntry = epubBookRef.EpubArchive().files.firstWhere(
-        (ArchiveFile x) => x.name == contentFilePath,
-        orElse: () => null);
+    ArchiveFile contentFileEntry = epubBookRef.EpubArchive()
+        .files
+        .firstWhere((ArchiveFile x) => x.name == contentFilePath, orElse: () => null);
     if (contentFileEntry == null)
-      throw new Exception(
-          "EPUB parsing error: file ${contentFilePath} not found in archive.");
+      throw new Exception("EPUB parsing error: file ${contentFilePath} not found in archive.");
     return contentFileEntry;
   }
 
